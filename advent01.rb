@@ -1,4 +1,4 @@
-lines = %q(ckmb52fldxkseven3fkjgcbzmnr7
+s = %q(ckmb52fldxkseven3fkjgcbzmnr7
 gckhqpb6twoqnjxqplthree2fourkspnsnzxlz1
 2onetwocrgbqm7
 frkh2nineqmqxrvdsevenfive
@@ -998,7 +998,12 @@ five2two7hstbbqzrninegbtwo2
 eightfblzpmhs4
 fbbdeightzzsdffh8jbjzxkclj
 3nine6five1
-).split("\n")
+)
+
+puts "Part One:\n"
+puts s.scan(/(\d)(?>.*?(\d(?=\D*$)))?/).map(&:compact).map{|s| s*(3-s.size)}.map(&:join).sum(&:to_i)
+
+lines = s.split("\n")
 
 @map = {
   "one" => 1,
@@ -1020,9 +1025,5 @@ end
 union = @map.keys.join("|")
 first = lines.map { |line| to_i line[Regexp.new "\\d|#{union}"]}
 last = lines.map { |line| to_i line.reverse[Regexp.new "\\d|#{union.reverse}"].reverse }
+puts "Part Two:\n"
 puts first.zip(last).map(&:join).sum(&:to_i)
-
-# s.gsub!(Regexp.union(map.keys), map)
-# s.gsub!(Regexp.union(map2.keys), map2)
-# puts s.gsub(/[^\d\n]/, "").split("\n").map{|s| s[0] + s[-1]}.sum(&:to_i)
-# puts s.scan(/(\d)(?>.*?(\d(?=\D*$)))?/).map(&:compact).map{|s| s*(3-s.size)}.map(&:join).sum(&:to_i)
