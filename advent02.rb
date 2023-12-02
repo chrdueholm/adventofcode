@@ -116,4 +116,19 @@ results = s.split("\n").map do |game|
   [game_id_str.gsub(/\D+/, "").to_i, round_results.flatten.all? ? true: nil]
 end
 
+puts "Part One:\n"
 puts results.to_h.compact.keys.sum
+
+results = s.split("\n").map do |game|
+  color_map = {}
+  game.split(": ").last.split("; ").each do |round_str|
+    round_str.scan(/(\d+)\s(\w+)/).each do |set|
+      color_map[set[1]] ||= []
+      color_map[set[1]] << set[0].to_i
+    end
+  end
+  color_map.values.map(&:max).reduce(:*)
+end
+
+puts "Part Two:\n"
+puts results.sum
