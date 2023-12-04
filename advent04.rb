@@ -204,13 +204,17 @@ Card 203:  3 95 82 57 59 23 20 77 49 28 | 60 35 25 96 83 91 47 86 40 73 33 24 12
 Card 204: 11  9 81 75 39 52 19 96 47 66 | 37 22 70 43 51 72  7 67 50 83 90 23 24 28 57 87 86 13 27 76 94 35 40 17 91
 )
 
-results = s.split("\n").map do |card|
+def card_winner_count(card)
   _, card = card.split(":")
   numbers_str, winnings_str = card.split("|")
   numbers = numbers_str.split(" ")
   winnings = winnings_str.split(" ")
 
   winners = numbers.select { |number| winnings.include?(number) }.size
+end
+
+results = s.split("\n").map do |card|
+  winners = card_winner_count card
 
   if winners <= 1
     winners
@@ -227,12 +231,7 @@ puts results.sum
 instances = [1] * s.split("\n").size
 
 results = s.split("\n").each_with_index.map do |card, i|
-  _, card = card.split(":")
-  numbers_str, winnings_str = card.split("|")
-  numbers = numbers_str.split(" ")
-  winnings = winnings_str.split(" ")
-  
-  winners = numbers.select { |number| winnings.include?(number) }.size
+  winners = card_winner_count card
   instances[i].times do 
     winners.times do |win_i|
       next unless instances[i + win_i + 1]
