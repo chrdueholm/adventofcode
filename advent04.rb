@@ -204,36 +204,21 @@ Card 203:  3 95 82 57 59 23 20 77 49 28 | 60 35 25 96 83 91 47 86 40 73 33 24 12
 Card 204: 11  9 81 75 39 52 19 96 47 66 | 37 22 70 43 51 72  7 67 50 83 90 23 24 28 57 87 86 13 27 76 94 35 40 17 91
 )
 
-def card_winner_count(card)
-  _, card = card.split(":")
-  numbers_str, winnings_str = card.split("|")
-  numbers = numbers_str.split(" ")
-  winnings = winnings_str.split(" ")
-
-  winners = numbers.select { |number| winnings.include?(number) }.size
+cards = s.split("\n")
+win_counts = cards.map do |card|
+  numbers, winning_numbers = card.split(":").last.split("|").map { |str| str.split(" ")}
+  numbers.select { |number| winning_numbers.include?(number) }.size
 end
-
-results = s.split("\n").map do |card|
-  winners = card_winner_count card
-
-  if winners <= 1
-    winners
-  else
-    points = 1
-    (winners - 1).times { points *= 2}
-    points
-  end
-end
+points = win_counts.map { |wins| wins.zero? ? 0 : 2**(wins-1) }
 
 puts "Part One:\n"
-puts results.sum
+puts points.sum
 
-instances = [1] * s.split("\n").size
+instances = [1] * cards.size
 
-results = s.split("\n").each_with_index.map do |card, i|
-  winners = card_winner_count card
+win_counts.each_with_index.each do |wins, i|
   instances[i].times do 
-    winners.times do |win_i|
+    wins.times do |win_i|
       next unless instances[i + win_i + 1]
       instances[i + win_i + 1] += 1
     end
